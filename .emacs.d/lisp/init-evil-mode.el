@@ -6,9 +6,24 @@
 (use-package evil
   :ensure t
   :demand t
-  :init
-  (setq evil-undo-system 'undo-tree)
+  :custom
+  (evil-undo-system 'undo-tree)
+  (evil-ex-search-case 'insensitive)
   :config
+  (dolist (mode '(benchmark-init/tree-mode
+                  dashboard-mode
+                  elfeed-search-mode elfeed-show-mode
+                  flycheck-error-list-mode
+                  haskell-interactive-mode
+                  help-mode
+                  inferior-emacs-lisp-mode
+                  inferior-python-mode
+                  shell-mode
+                  special-mode
+                  timer-list-mode
+                  tuareg-interactive-mode
+                  xref--xref-buffer-mode))
+    (add-to-list 'evil-emacs-state-modes mode))
   (evil-set-initial-state 'org-agenda-mode 'emacs)
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'magit-mode 'emacs)

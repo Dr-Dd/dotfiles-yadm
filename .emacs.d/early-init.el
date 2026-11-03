@@ -18,7 +18,8 @@
                   gc-cons-threshold (* 16 1024 1024)
                   gc-cons-percentage 0.1)))
 
-;; Avoid flashing UI elements before custom.el turns them off.
+;; Avoid flashing UI elements before init turns the modes off.
+(push '(font . "Hack-18") default-frame-alist)
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)

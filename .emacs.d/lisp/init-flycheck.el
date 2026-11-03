@@ -11,6 +11,8 @@
               ("C-c e j" . flycheck-next-error)
               ("C-c e k" . flycheck-previous-error)
               ("C-c e l" . flycheck-list-errors))
+  :custom
+  (flycheck-emacs-lisp-load-path 'inherit)
   :config
   (global-flycheck-mode 1))
 

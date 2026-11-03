@@ -8,12 +8,19 @@
   :demand t
   :diminish
   :bind (("M-<SPC>" . company-complete))
+  :custom
+  (company-frontends
+   '(company-pseudo-tooltip-unless-just-one-frontend
+     company-echo-metadata-frontend
+     company-preview-if-just-one-frontend))
   :config
   (global-company-mode 1))
 
 (use-package company-c-headers
   :ensure t
-  :after company)
+  :after company
+  :config
+  (add-to-list 'company-backends #'company-c-headers))
 
 (provide 'init-company-mode)
 ;;; init-company-mode.el ends here

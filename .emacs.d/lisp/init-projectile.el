@@ -8,6 +8,8 @@
   :demand t
   :diminish
   :bind-keymap ("C-c p" . projectile-command-map)
+  :custom
+  (projectile-tags-command "gtags")
   :config
   (projectile-mode 1))
 

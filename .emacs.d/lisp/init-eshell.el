@@ -3,6 +3,11 @@
 ;;; eshell functions
 ;;; Code:
 
+(use-package esh-mode
+  :defer t
+  :custom
+  (eshell-scroll-to-bottom-on-input 'all))
+
 (with-eval-after-load 'evil
   (evil-set-initial-state 'eshell-mode 'emacs))
 

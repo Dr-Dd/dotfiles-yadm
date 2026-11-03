@@ -6,6 +6,9 @@
 (use-package beacon
   :ensure t
   :demand t
+  :custom
+  (beacon-blink-duration 0.01)
+  (beacon-color "chartreuse")
   :config
   (beacon-mode 1))
 

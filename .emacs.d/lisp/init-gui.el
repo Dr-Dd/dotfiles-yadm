@@ -10,7 +10,7 @@
 ;; X11's
 (setq inhibit-x-resources t)
 
-;; Main font is Hack, via `default-frame-alist' in custom.el.
+;; Main font is Hack, via `default-frame-alist' in early-init.el.
 ;; Use the color emoji font for emoji only.
 (set-fontset-font t 'emoji (font-spec :family "Noto Color Emoji") nil 'prepend)
 

@@ -7,6 +7,8 @@
   :ensure t
   :demand t
   :diminish
+  :custom
+  (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
   :config
   (global-undo-tree-mode 1))
 
