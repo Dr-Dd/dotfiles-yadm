@@ -1,3 +1,6 @@
+set encoding=utf-8 " before listchars, which uses non-ASCII characters
+scriptencoding utf-8
+
 function! s:MkNonExDir(file, buf)
     " Only proceed if the buffer is a normal file and not a special one (like netrw)
     if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
