@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# yadm bootstrap: run by `yadm clone` (or manually with `yadm bootstrap`).
+# Safe to re-run: every step skips work that is already done.
+set -euo pipefail
+
+log() { printf '\e[1;34m==>\e[0m %s\n' "$*"; }
+
+PACKAGES=(
+  # shell
+  zsh zsh-syntax-highlighting zsh-autosuggestions
+  # core tools
+  git vim tmux htop emacs alacritty
+  # fonts
+  ttf-hack-nerd noto-fonts-emoji
+  # password manager (rofi-rbw, bw-type, pinentry-rbw)
+  rofi rbw rofi-rbw bitwarden-cli jq fuzzel libsecret
+)
+
+AUR_PACKAGES=(
+  dotool           # typer used by rofi-rbw
+  amneziawg-tools  # amnezia_start.sh
+)
+
+log "Installing packages"
+sudo pacman -S --needed --noconfirm "${PACKAGES[@]}"
+
+if command -v yay >/dev/null; then
+  log "Installing AUR packages"
+  yay -S --needed --noconfirm "${AUR_PACKAGES[@]}"
+else
+  log "yay not found, skipping AUR packages: ${AUR_PACKAGES[*]}"
+fi
+
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then
+  log "Installing tmux plugin manager"
+  git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  ~/.tmux/plugins/tpm/bin/install_plugins
+fi
+
+if [[ "$(getent passwd "$USER" | cut -d: -f7)" != */zsh ]]; then
+  log "Setting zsh as login shell"
+  chsh -s "$(command -v zsh)"
+fi
+
+log "Refreshing font cache"
+fc-cache -f >/dev/null
+
+log "Done. Start Emacs once to install its packages."

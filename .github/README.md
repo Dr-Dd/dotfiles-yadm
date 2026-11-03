@@ -18,10 +18,11 @@ sudo pacman -S yadm
 yadm clone git@github.com:Dr-Dd/dotfiles-yadm.git
 ```
 
-After cloning:
+`yadm clone` offers to run [`~/.config/yadm/bootstrap`](../.config/yadm/bootstrap),
+which installs packages (pacman + yay), tmux plugins, and sets zsh as the shell.
+It is safe to re-run with `yadm bootstrap`.
 
-- **tmux:** install [TPM](https://github.com/tmux-plugins/tpm), then press `prefix + I`.
-- **Emacs:** packages install on first launch.
+Emacs packages install on first launch.
 
 ## Usage
 
