@@ -4,7 +4,8 @@
  * When the active model's provider is "claude-code" (from pi-claude-code), adds Claude
  * subscription usage limits to the built-in footer's extension status line:
  *
- *   C12% W37%   (C = current 5-hour session window, W = 7-day weekly window)
+ *   C12% ↻14:30 W37%   (C = current 5-hour session window, ↻ = its local reset time,
+ *                       W = 7-day weekly window)
  *
  * The built-in footer is left untouched; this only uses ctx.ui.setStatus().
  *
@@ -118,7 +119,18 @@ export default function (pi: ExtensionAPI) {
 			if (value >= 70) return theme.fg("warning", text);
 			return theme.fg("dim", text);
 		};
-		ctx.ui.setStatus(STATUS_KEY, `${pct(limits?.session, "C")} ${pct(limits?.week, "W")}`);
+		// Next reset of the current (5-hour) window; hidden once it has passed, since the
+		// next window's reset time is unknown until Claude Code reports it.
+		const reset = (w: Window | undefined) => {
+			if (!w || typeof w.resetsAt !== "number") return "";
+			const at = new Date(w.resetsAt * 1000);
+			if (at.getTime() <= Date.now()) return "";
+			const hh = String(at.getHours()).padStart(2, "0");
+			const mm = String(at.getMinutes()).padStart(2, "0");
+			return " " + theme.fg("dim", `↻${hh}:${mm}`);
+		};
+		const session = pct(limits?.session, "C") + reset(limits?.session);
+		ctx.ui.setStatus(STATUS_KEY, `${session} ${pct(limits?.week, "W")}`);
 	}
 
 	pi.on("session_start", async (_event, ctx) => {
