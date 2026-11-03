@@ -1,0 +1,6 @@
+selector-args = -theme rbw
+no-help = true
+action = type
+typer = dotool
+target = password
+keybindings = Alt+1:type:username,Alt+2:type:password,Alt+3:type:username:tab:password

@@ -1,0 +1,52 @@
+[general]
+import = [
+"~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[font]
+size = 18
+normal = { family = "hack nerd font mono", style = "regular"}
+bold = { family = "hack nerd font mono", style = "bold" }
+italic = { family = "hack nerd font mono", style = "italic"}
+bold_italic = { family = "hack nerd font mono", style = "bold italic"}
+
+
+[window]
+dynamic_title = true
+padding = { x = 8, y = 8 }
+dynamic_padding = true
+
+[selection]
+save_to_clipboard = true
+
+[terminal]
+osc52 = "CopyPaste"
+
+[scrolling]
+history = 50000
+
+[cursor]
+style = { shape = "Beam", blinking = "Off" }
+unfocused_hollow = true
+
+[mouse]
+hide_when_typing = true
+
+[keyboard]
+bindings = [
+  { key = "Left",  mods = "Control",     chars = "\u001bb"   },
+  { key = "Right", mods = "Control",     chars = "\u001bf"   },
+  { key = "Left",  mods = "Alt",     chars = "\u001bb"   },
+  { key = "Right", mods = "Alt",     chars = "\u001bf"   },
+  { key = "Left",  mods = "Super"  , chars = "\u001bOH"  },
+  { key = "Right", mods = "Super"  , chars =  "\u001bOF" },
+  { key = "Back",  mods = "Super"  , chars = "\u0015"    },
+  { key = "Enter", mods = "Shift",       chars = "\u001b[13;2u" },
+  { key = "Enter", mods = "Alt",         chars = "\u001b[13;3u" },
+  { key = "F11",   action = "ToggleFullscreen" },
+  { key = "Equals", mods = "Control", action = "IncreaseFontSize" },
+  { key = "Minus",  mods = "Control", action = "DecreaseFontSize" },
+  { key = "Key0",   mods = "Control", action = "ResetFontSize" },
+  { key = "N",      mods = "Control|Shift", action = "CreateNewWindow" },
+]
+

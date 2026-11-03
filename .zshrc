@@ -1,0 +1,115 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt autocd extendedglob nomatch notify interactivecomments
+unsetopt beep
+bindkey -e
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+
+zstyle :compinstall filename '/home/drd/.zshrc'
+zstyle ':completion:*' menu select
+zstyle ':completion::complete:*' gain-privileges 1
+
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+autoload -Uz select-word-style
+select-word-style bash
+
+preexec() { print -Pn "\e]0;$1% \a" }
+
+bindkey '^I'   complete-word       # tab          | complete
+bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest
+
+setopt PROMPT_SUBST
+
+function nonzero_return() {
+    RETVAL=$?
+    [ $RETVAL -ne 0 ] && echo "[$RETVAL]"
+}
+
+function parse_git_branch() {
+    BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+    if [[ -n "${BRANCH}" ]]; then
+        STAT=$(parse_git_dirty)
+        echo "[${BRANCH}${STAT}]"
+    else
+        echo ""
+    fi
+}
+
+# get current status of git repo
+#function parse_git_dirty {
+	#status=`git status 2>&1 | tee`
+	#dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
+	#untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
+	#ahead=`echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
+	#newfile=`echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
+	#renamed=`echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
+	#deleted=`echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
+	#bits=''
+	#if [ "${renamed}" == "0" ]; then
+		#bits=">${bits}"
+	#fi
+	#if [ "${ahead}" == "0" ]; then
+		#bits="*${bits}"
+	#fi
+	#if [ "${newfile}" == "0" ]; then
+		#bits="+${bits}"
+	#fi
+	#if [ "${untracked}" == "0" ]; then
+		#bits="?${bits}"
+	#fi
+	#if [ "${deleted}" == "0" ]; then
+		#bits="x${bits}"
+	#fi
+	#if [ "${dirty}" == "0" ]; then
+		#bits="!${bits}"
+	#fi
+	#if [ ! "${bits}" == "" ]; then
+		#echo " ${bits}"
+	#else
+		#echo ""
+	#fi
+#}
+
+function parse_git_dirty {
+    _status=$(git status 2>&1 | tee)
+    dirty=$(echo -n "${_status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?")
+    untracked=$(echo -n "${_status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?")
+    ahead=$(echo -n "${_status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?")
+    newfile=$(echo -n "${_status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?")
+    renamed=$(echo -n "${_status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?")
+    deleted=$(echo -n "${_status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?")
+
+    bits=''
+    if [[ "${renamed}" == "0" ]]; then bits=">${bits}"; fi
+    if [[ "${ahead}" == "0" ]]; then bits="*${bits}"; fi
+    if [[ "${newfile}" == "0" ]]; then bits="+${bits}"; fi
+    if [[ "${untracked}" == "0" ]]; then bits="?${bits}"; fi
+    if [[ "${deleted}" == "0" ]]; then bits="x${bits}"; fi
+    if [[ "${dirty}" == "0" ]]; then bits="!${bits}"; fi
+
+    if [[ -n "${bits}" ]]; then
+        echo " ${bits}"
+    else
+        echo ""
+    fi
+}
+
+#λ
+#󰇥
+PROMPT=$'\n╭%F{red}$(nonzero_return)%f%F{green}[%n@%m:%F{blue}%~%F{green}]%f%F{yellow}$(parse_git_branch)%F{blue}[%D{%Y-%m-%d⋅%H:%M:%S}]%f\n╰%F{blue}[󰇥]%f$ '
+
+
+alias ls="ls --color=auto"
+
+autoload -U zmv
+

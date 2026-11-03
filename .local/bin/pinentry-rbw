@@ -1,0 +1,9 @@
+#!/bin/sh
+echo "OK Pleased to meet you"
+while read -r cmd rest; do
+  case "$cmd" in
+    GETPIN) printf 'D %s\nOK\n' "$(secret-tool lookup service rbw)" ;;
+    BYE)    echo "OK"; exit 0 ;;
+    *)      echo "OK" ;;
+  esac
+done

@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SESSION_FILE="$XDG_RUNTIME_DIR/bw-session"   # tmpfs, wiped on logout
+
+if [ "${XDG_SESSION_TYPE:-}" = wayland ]; then
+  MENU=(fuzzel --dmenu)
+  PROMPT=(fuzzel --dmenu --password --lines 0 --prompt "Bitwarden master password: ")
+  TYPE=(wtype -)
+  ENTER=(wtype -k Return)
+else
+  MENU=(rofi -dmenu -i -p bitwarden)
+  PROMPT=(rofi -dmenu -password -p "master password")
+  TYPE=(xdotool type --clearmodifiers --file -)
+  ENTER=(xdotool key Return)
+fi
+
+# Reuse the cached session key, or unlock via a password prompt
+[ -f "$SESSION_FILE" ] && export BW_SESSION=$(<"$SESSION_FILE")
+if ! bw unlock --check >/dev/null 2>&1; then
+  pw=$("${PROMPT[@]}" </dev/null) || exit 0
+  BW_SESSION=$(BW_PASS="$pw" bw unlock --passwordenv BW_PASS --raw) || exit 1
+  export BW_SESSION
+  ( umask 077; printf %s "$BW_SESSION" > "$SESSION_FILE" )
+fi
+
+items=$(bw list items | jq '[.[] | select(.login.password != null)]')
+labels=$(jq -r '.[] | "\(.name)  (\(.login.username // ""))"' <<<"$items")
+
+choice=$("${MENU[@]}" <<<"$labels") || exit 0
+idx=$(grep -nxF -- "$choice" <<<"$labels" | head -1 | cut -d: -f1)
+
+sleep 0.1   # let focus return to the original window
+jq -j --argjson i "$((idx-1))" '.[$i].login.password' <<<"$items" | "${TYPE[@]}"
+# "${ENTER[@]}"   # uncomment to also press Enter after typing

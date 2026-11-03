@@ -1,0 +1,20 @@
+{
+  "lastChangelogVersion": "1.5.0",
+  "defaultProvider": "claude-code",
+  "defaultModel": "claude-sonnet-5-5",
+  "defaultThinkingLevel": "medium",
+  "showHardwareCursor": true,
+  "packages": [
+    "https://github.com/earendil-works/pi-claude-code",
+    "npm:pi-subagents"
+  ],
+  "subagents": {
+    "disableBuiltins": true
+  },
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-subagents\",\"scope\":\"user\"}": "0.84.0",
+    "{\"source\":\"npm:pi-prompt-template-model\",\"scope\":\"user\"}": "0.12.3",
+    "{\"source\":\"npm:pi-subagents\",\"scope\":\"project\"}": "0.84.0",
+    "{\"source\":\"npm:pi-prompt-template-model\",\"scope\":\"project\"}": "0.12.3"
+  }
+}
